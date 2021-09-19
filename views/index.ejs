@@ -13,37 +13,45 @@
     <div class="main_div">
 
         <div class="top" id="top1">
-            <h2 id="heading">Color Game</h2>
+            <bold id="heading">Color Game</bold>
+            <br>
             <strong id="sub_heading">Choose the correct Color</strong>
+            <br>
+            <p id="answer">
+                <%=data.color[Math.floor(Math.random()*data.difficulty)] %>
+            </p>
         </div>
-        <div class="mid" id="mid1">
-            <div class="mid_left">
-                <button class="menu" id="reset_btn" value="Reset">Reset</button>
-                <button class="menu" id="login_btn" value="login">login</button>
-                <button class="signup" id="signup_btn" value="signup">signup</button>
+        <form method="post" action="/">
+            <div class="mid" id="mid1">
+                <div class="mid_left">
+                    <button class="menu" name="reset_btn" value="Reset">Reset</button>
+                    <!--<button class="menu" name="login_btn" value="login">Login</button>    -->
+                    <!--<button class="signup" name="signup_btn" value="signup">SignUp</button> -->
 
+                </div>
+
+                <div class="mid_center" name="msg" id="win_message"></div>
+                <div class="mid_right">
+                    <button class="menu" name="difficulty_btn" value="difficulty"> Difficulty</button>
+
+                </div>
             </div>
-
-            <div class="mid_center" id="win_message">you win</div>
-            <div class="mid_right">
-                <button class="menu" id="difficulty" value="difficulty_lower"> difficulty lower</button>
-                <button class="menu" id="difficulty" value="difficulty_rise">difficlty rise</button>
-
-            </div>
-        </div>
+        </form>
         <div class="bottom" id="bottom1">
+
             <div class="bottom_inner" id="bottom_up">
-                <div class="color_div" id="cd1"></div>
-                <div class="color_div" id="cd2"></div>
-                <div class="color_div" id="cd3"></div>
+                <% for(var i = 0 ; i< 3; ++i) {  %>
+                    <%- `<div class="color_div" id=${"id_"+i} name=${"box_"+i} style=\"background-color : ${data.color[i]}\"; ></div> ` %>
+                        <% } %>
 
             </div>
-
-            <div class="bottom_inner" id="bottom_down">
-                <div class="color_div" id="cd4"></div>
-                <div class="color_div" id="cd5"></div>
-                <div class="color_div" id="cd6"></div>
-            </div>
+            <% if(data.difficulty>3 ){%>
+                <div class="bottom_inner" id="bottom_down">
+                    <% for(var i = 3 ; i< 6; ++i) {  %>
+                        <%- `<div class="color_div" id=${"id_"+i} name=${"box_"+i} style=\"background-color : ${data.color[i]}\"; ></div> ` %>
+                            <% } %>
+                </div>
+                <% } %>
 
 
 
@@ -51,7 +59,34 @@
         </div>
 
     </div>
+    <script type="text/javascript">
+        const doc = document.getElementsByClassName("color_div");
 
+        const answer = document.getElementById("answer").textContent.trim();
+
+        for (const element of doc) {
+            element.addEventListener("click", (event) => {
+                if (element.style.backgroundColor == answer) {
+
+                    const inner_doc = document.getElementsByClassName("color_div")
+                    for (var ele of inner_doc) {
+                        if (ele.style.backgroundColor != "rgb(77, 75, 75)") {
+                            ele.style.backgroundColor = answer;
+                            const mid_box = document.getElementById("mid1");
+                            const message = document.getElementById("win_message");
+                            mid_box.style.backgroundColor = answer;
+                            message.textContent = " yay you win";
+
+                        }
+                    }
+
+                } else {
+                    element.style.backgroundColor = "rgb(77, 75, 75)";
+                }
+            });
+        };
+        console.log("found end");
+    </script>
 
 </body>
 
